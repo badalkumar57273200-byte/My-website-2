@@ -97,7 +97,6 @@
         .guide-content h3 { font-size: 22px; margin-bottom: 10px; color: #4facfe; }
         .guide-content p { font-size: 15px; color: #a1a1aa; line-height: 1.6; }
         
-        /* Simulated Mockups (Same as screenshots) */
         .mockup-box {
             width: 100%; background: #18181b; border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px; padding: 15px; text-align: center; font-size: 14px; color: #71717a;
@@ -153,4 +152,168 @@
             <span>EN ⌄</span>
         </div>
     </header>
-    
+
+    <div class="main-wrapper">
+        <h1>Download Instantly in <br> <span class="highlight">Ultra HD Quality</span></h1>
+        <p class="subtitle">The fastest, completely anonymous media downloader for the modern web.</p>
+
+        <div class="glass-panel">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab(this, 'Reels')">🎬 Reels</div>
+                <div class="tab" onclick="switchTab(this, 'Photo')">📸 Photo</div>
+                <div class="tab" onclick="switchTab(this, 'Story')">⏱️ Story</div>
+                <div class="tab" onclick="switchTab(this, 'Audio')">🎵 Audio</div>
+            </div>
+
+            <div class="input-wrapper">
+                <input type="text" id="linkInput" placeholder="Paste Instagram link here...">
+                <button class="btn-download" onclick="startProcess()">Download Now</button>
+            </div>
+            
+            <p id="statusMsg" style="margin-top: 20px; font-weight: 600; display: none;"></p>
+        </div>
+
+        <div class="ad-space">PREMIUM AD BANNER SPACE</div>
+
+        <div class="template-section">
+            <h2>How to Download Instagram Reels & Videos?</h2>
+            
+            <div class="guide-block">
+                <div class="guide-content">
+                    <h3>Step 1: Copy the URL Link</h3>
+                    <p>Open the Instagram app or website, find the Reel, video, or photo you wish to save, click on the share button, and select "Copy Link".</p>
+                </div>
+                <div class="mockup-box">
+                    Visual Guide: Instagram App → Share Button → 🔗 <b>instagram.com/reel/CmcRCl...</b>
+                </div>
+            </div>
+
+            <div class="guide-block">
+                <div class="guide-content">
+                    <h3>Step 2: Paste Link Into Input Line</h3>
+                    <p>Come back to NovaSave, and insert the copied Instagram URL into the high-speed input box at the top of the page.</p>
+                </div>
+                <div class="mockup-box">
+                    <div class="mockup-input">https://www.instagram.com/reel/DWGoQ5ID...</div>
+                </div>
+            </div>
+
+            <div class="guide-block">
+                <div class="guide-content">
+                    <h3>Step 3: Click the Download Button</h3>
+                    <p>Press the glowing "Download Now" button. Our cloud servers will automatically process the link and fetch the original HD file for you instantly.</p>
+                </div>
+                <div class="mockup-box">
+                    <div class="mockup-btn">⬇️ Download Now</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🚀 Blazing Fast</h3>
+                <p>Our distributed cloud servers ensure your videos are ready to download in milliseconds, not minutes.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔒 100% Anonymous</h3>
+                <p>We respect your privacy. No logs kept, no accounts required. Download without leaving a footprint.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Cross-Platform</h3>
+                <p>Works flawlessly on your iPhone, Android, Mac, or Windows PC. No extra apps needed.</p>
+            </div>
+        </div>
+
+        <div class="ad-space">PREMIUM AD BANNER SPACE</div>
+
+        <div class="faq-section">
+            <h2 style="font-size: 28px; margin-bottom: 30px; text-align: center;">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>Is this downloader free to use?</h4>
+                <p>Yes, NovaSave is entirely free. You can download unlimited media without any hidden subscriptions or watermarks.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What file formats are supported?</h4>
+                <p>Videos and Reels are saved in high-quality MP4 format, while photos are saved as crisp JPGs to save space on your device.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Can I download from private accounts?</h4>
+                <p>Currently, to respect user privacy policies, our tool only supports downloading content from public profiles.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+            <a href="#">API Documentation</a>
+        </div>
+        <p>© 2026 NovaSave Technologies. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function switchTab(element, type) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('linkInput').placeholder = `Paste Instagram ${type} link here...`;
+        }
+
+        async function startProcess() {
+            const inputField = document.getElementById('linkInput');
+            const instaUrl = inputField.value.trim();
+            const msg = document.getElementById('statusMsg');
+            
+            if(!instaUrl) {
+                alert("Please paste an Instagram link first.");
+                return;
+            }
+
+            msg.style.display = 'block';
+            msg.innerHTML = 'Connecting to servers... Please wait ⏳';
+            msg.style.color = '#4facfe';
+
+            const encodedUrl = encodeURIComponent(instaUrl);
+            const apiUrl = `https://instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com/convert?url=${encodedUrl}`;
+            
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-host': 'instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com',
+                    'x-rapidapi-key': '904407dfd4msh1d51bbfad72fdd7p17656ajsn4295a1a0c2cd'
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, options);
+                const result = await response.json();
+                
+                let downloadLink = null;
+                
+                if (result && result.media && result.media.length > 0) {
+                    let mediaObj = result.media[0];
+                    downloadLink = mediaObj.url || mediaObj.link || mediaObj.video || mediaObj.video_url;
+                }
+                
+                if (!downloadLink && result.url) downloadLink = result.url;
+                if (!downloadLink && result.video_url) downloadLink = result.video_url;
+
+                if (downloadLink) {
+                    msg.innerHTML = '✅ Media ready! Download started...';
+                    msg.style.color = '#00ff88';
+                    window.open(downloadLink, '_blank');
+                } else {
+                    msg.innerHTML = '❌ Link process karne mein dikkat aayi. Ek baar link check karein.';
+                    msg.style.color = '#ff0844';
+                }
+            } catch (error) {
+                msg.innerHTML = '❌ API Error: ' + error.message;
+                msg.style.color = '#ff0844';
+            }
+        }
+    </script>
+</body>
+</html>
