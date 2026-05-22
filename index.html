@@ -76,22 +76,58 @@
         }
         .btn-download:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0, 242, 254, 0.5); }
 
-        /* --- New: Result Card Area --- */
+        /* --- FastDL Style Result Card --- */
         #resultContainer { display: none; margin-bottom: 40px; }
+        
         .result-card {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 25px; max-width: 500px; margin: 0 auto;
-            backdrop-filter: blur(20px); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #18181b; /* Solid dark background for structure */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px; 
+            max-width: 450px; 
+            margin: 0 auto;
+            text-align: left; /* Text alignment like FastDL */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .result-card h3 { font-size: 22px; margin-bottom: 20px; font-weight: 800; color: #fff; }
-        .preview-media { width: 100%; border-radius: 12px; max-height: 400px; object-fit: cover; background: #000; margin-bottom: 20px; }
+        .result-card h3 { 
+            font-size: 22px; 
+            margin-bottom: 15px; 
+            font-weight: 800; 
+            color: #fff; 
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .preview-media { 
+            width: 100%; 
+            border-radius: 12px; 
+            max-height: 500px; 
+            background: #000; 
+            margin-bottom: 15px; 
+            object-fit: contain;
+        }
         .btn-final-download {
-            background: linear-gradient(90deg, #2563eb, #3b82f6); color: #fff; border: none;
-            padding: 15px; font-size: 18px; font-weight: 800; border-radius: 10px; width: 100%;
-            cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            background: #2563eb; /* Solid Blue color like FastDL */
+            color: #fff; 
+            border: none;
+            padding: 16px; 
+            font-size: 18px; 
+            font-weight: 800; 
+            border-radius: 10px; 
+            width: 100%;
+            cursor: pointer; 
+            transition: 0.2s; 
+            margin-bottom: 15px;
         }
-        .btn-final-download:hover { transform: translateY(-2px); background: linear-gradient(90deg, #1d4ed8, #2563eb); }
-        .result-caption { margin-top: 15px; font-size: 14px; color: #a1a1aa; line-height: 1.5; text-align: left; }
+        .btn-final-download:hover { 
+            background: #1d4ed8; 
+        }
+        .result-caption { 
+            font-size: 14px; 
+            color: #e4e4e7; 
+            line-height: 1.6; 
+            text-align: left; 
+            word-break: break-word;
+        }
 
         /* Extra Space for Ad Banners */
         .ad-space {
@@ -265,6 +301,40 @@
             document.getElementById('linkInput').placeholder = `Paste Instagram ${type} link here...`;
         }
 
+        // JavaScript Binary Blob Force Downloader 
+        async function forceDownload(url, filename) {
+            const btn = document.querySelector('.btn-final-download');
+            const originalText = btn.innerText;
+            btn.innerText = "Downloading to device... 📥";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+                btn.innerText = "✅ Saved Successfully!";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }, 3000);
+            } catch (error) {
+                // Agar badi file ho ya browser block kare, toh naye tab mein khol dega
+                window.open(url, '_blank');
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
         async function startProcess() {
             const inputField = document.getElementById('linkInput');
             const instaUrl = inputField.value.trim();
@@ -276,11 +346,10 @@
                 return;
             }
 
-            // Hide old result and show loading text (like FastDL)
             resultBox.style.display = 'none';
             msg.style.display = 'block';
             msg.innerHTML = 'We are downloading the reel. Please wait... ⏳';
-            msg.style.color = '#a1a1aa'; // Light grey text
+            msg.style.color = '#a1a1aa';
 
             const encodedUrl = encodeURIComponent(instaUrl);
             const apiUrl = `https://instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com/convert?url=${encodedUrl}`;
@@ -298,41 +367,37 @@
                 const result = await response.json();
                 
                 let downloadLink = null;
-                let thumbnail = null;
-                let captionText = "Instagram Media Download";
+                let captionText = "";
                 
                 if (result && result.media && result.media.length > 0) {
                     let mediaObj = result.media[0];
                     downloadLink = mediaObj.url || mediaObj.link || mediaObj.video || mediaObj.video_url;
-                    thumbnail = mediaObj.thumbnail || mediaObj.image || null;
                 }
                 
                 if (!downloadLink && result.url) downloadLink = result.url;
                 if (!downloadLink && result.video_url) downloadLink = result.video_url;
-                if (result.title || result.caption) captionText = result.title || result.caption;
+                
+                // Caption handle
+                if (result.title) captionText = result.title;
+                else if (result.caption) captionText = result.caption;
 
                 if (downloadLink) {
-                    // Hide loading message
                     msg.style.display = 'none';
                     
-                    // Render the Result Card (Preview + Final Button)
-                    let previewHTML = '';
-                    if(thumbnail) {
-                        previewHTML = `<img src="${thumbnail}" class="preview-media" alt="Video Thumbnail">`;
-                    } else {
-                        previewHTML = `<video src="${downloadLink}" class="preview-media" controls></video>`;
-                    }
-
+                    // Naya FastDL jaisa Result Card Setup
+                    // Tute hue image ka jhanjhat khatam, direct video player laga diya hai
                     resultBox.innerHTML = `
                         <div class="result-card">
                             <h3>Search result</h3>
-                            ${previewHTML}
-                            <button class="btn-final-download" onclick="window.open('${downloadLink}', '_blank')">Download Video</button>
-                            <p class="result-caption">${captionText.substring(0, 100)}...</p>
+                            
+                            <video src="${downloadLink}" class="preview-media" controls></video>
+                            
+                            <button class="btn-final-download" onclick="forceDownload('${downloadLink}', 'novasave_video.mp4')">Download Video</button>
+                            
+                            ${captionText ? `<p class="result-caption">${captionText}</p>` : ''}
                         </div>
                     `;
                     
-                    // Show the card
                     resultBox.style.display = 'block';
                     
                 } else {
