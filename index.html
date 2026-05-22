@@ -46,7 +46,7 @@
         .glass-panel {
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px); border-radius: 24px; padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 30px;
         }
 
         /* Modern Tabs */
@@ -76,6 +76,23 @@
         }
         .btn-download:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0, 242, 254, 0.5); }
 
+        /* --- New: Result Card Area --- */
+        #resultContainer { display: none; margin-bottom: 40px; }
+        .result-card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 25px; max-width: 500px; margin: 0 auto;
+            backdrop-filter: blur(20px); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .result-card h3 { font-size: 22px; margin-bottom: 20px; font-weight: 800; color: #fff; }
+        .preview-media { width: 100%; border-radius: 12px; max-height: 400px; object-fit: cover; background: #000; margin-bottom: 20px; }
+        .btn-final-download {
+            background: linear-gradient(90deg, #2563eb, #3b82f6); color: #fff; border: none;
+            padding: 15px; font-size: 18px; font-weight: 800; border-radius: 10px; width: 100%;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+        .btn-final-download:hover { transform: translateY(-2px); background: linear-gradient(90deg, #1d4ed8, #2563eb); }
+        .result-caption { margin-top: 15px; font-size: 14px; color: #a1a1aa; line-height: 1.5; text-align: left; }
+
         /* Extra Space for Ad Banners */
         .ad-space {
             width: 100%; height: 100px; background: rgba(255,255,255,0.02);
@@ -84,32 +101,15 @@
             margin: 40px 0; letter-spacing: 2px;
         }
 
-        /* --- New Expanded Template Guide Section --- */
+        /* Template Section */
         .template-section { margin-top: 60px; text-align: left; }
         .template-section h2 { font-size: 28px; font-weight: 800; margin-bottom: 30px; text-align: center; }
-        
-        .guide-block { 
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px; padding: 30px; margin-bottom: 30px;
-            display: flex; flex-direction: column; gap: 20px;
-        }
-        
+        .guide-block { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 20px; }
         .guide-content h3 { font-size: 22px; margin-bottom: 10px; color: #4facfe; }
         .guide-content p { font-size: 15px; color: #a1a1aa; line-height: 1.6; }
-        
-        .mockup-box {
-            width: 100%; background: #18181b; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; padding: 15px; text-align: center; font-size: 14px; color: #71717a;
-        }
-        .mockup-input {
-            background: #000; border: 1px solid #ff0844; padding: 10px; 
-            border-radius: 8px; color: #fff; margin: 10px 0; text-align: left;
-            font-size: 12px; word-break: break-all;
-        }
-        .mockup-btn {
-            background: linear-gradient(90deg, #ff0844, #ffb199); color: #fff;
-            padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: bold;
-        }
+        .mockup-box { width: 100%; background: #18181b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; text-align: center; font-size: 14px; color: #71717a; }
+        .mockup-input { background: #000; border: 1px solid #ff0844; padding: 10px; border-radius: 8px; color: #fff; margin: 10px 0; text-align: left; font-size: 12px; word-break: break-all; }
+        .mockup-btn { background: linear-gradient(90deg, #ff0844, #ffb199); color: #fff; padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: bold; }
 
         /* Features Section */
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 50px; text-align: left; }
@@ -137,6 +137,7 @@
             .btn-download { width: 100%; }
             .glass-panel { padding: 20px; }
             .nav-links { display: none; }
+            .result-card { padding: 15px; }
         }
     </style>
 </head>
@@ -167,11 +168,13 @@
 
             <div class="input-wrapper">
                 <input type="text" id="linkInput" placeholder="Paste Instagram link here...">
-                <button class="btn-download" onclick="startProcess()">Download Now</button>
+                <button class="btn-download" onclick="startProcess()">Download</button>
             </div>
             
             <p id="statusMsg" style="margin-top: 20px; font-weight: 600; display: none;"></p>
         </div>
+
+        <div id="resultContainer"></div>
 
         <div class="ad-space">PREMIUM AD BANNER SPACE</div>
 
@@ -201,10 +204,10 @@
             <div class="guide-block">
                 <div class="guide-content">
                     <h3>Step 3: Click the Download Button</h3>
-                    <p>Press the glowing "Download Now" button. Our cloud servers will automatically process the link and fetch the original HD file for you instantly.</p>
+                    <p>Press the glowing "Download" button. Our cloud servers will automatically process the link and fetch the original HD file for you instantly.</p>
                 </div>
                 <div class="mockup-box">
-                    <div class="mockup-btn">⬇️ Download Now</div>
+                    <div class="mockup-btn">⬇️ Download</div>
                 </div>
             </div>
         </div>
@@ -266,15 +269,18 @@
             const inputField = document.getElementById('linkInput');
             const instaUrl = inputField.value.trim();
             const msg = document.getElementById('statusMsg');
+            const resultBox = document.getElementById('resultContainer');
             
             if(!instaUrl) {
                 alert("Please paste an Instagram link first.");
                 return;
             }
 
+            // Hide old result and show loading text (like FastDL)
+            resultBox.style.display = 'none';
             msg.style.display = 'block';
-            msg.innerHTML = 'Connecting to servers... Please wait ⏳';
-            msg.style.color = '#4facfe';
+            msg.innerHTML = 'We are downloading the reel. Please wait... ⏳';
+            msg.style.color = '#a1a1aa'; // Light grey text
 
             const encodedUrl = encodeURIComponent(instaUrl);
             const apiUrl = `https://instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com/convert?url=${encodedUrl}`;
@@ -292,25 +298,49 @@
                 const result = await response.json();
                 
                 let downloadLink = null;
+                let thumbnail = null;
+                let captionText = "Instagram Media Download";
                 
                 if (result && result.media && result.media.length > 0) {
                     let mediaObj = result.media[0];
                     downloadLink = mediaObj.url || mediaObj.link || mediaObj.video || mediaObj.video_url;
+                    thumbnail = mediaObj.thumbnail || mediaObj.image || null;
                 }
                 
                 if (!downloadLink && result.url) downloadLink = result.url;
                 if (!downloadLink && result.video_url) downloadLink = result.video_url;
+                if (result.title || result.caption) captionText = result.title || result.caption;
 
                 if (downloadLink) {
-                    msg.innerHTML = '✅ Media ready! Download started...';
-                    msg.style.color = '#00ff88';
-                    window.open(downloadLink, '_blank');
+                    // Hide loading message
+                    msg.style.display = 'none';
+                    
+                    // Render the Result Card (Preview + Final Button)
+                    let previewHTML = '';
+                    if(thumbnail) {
+                        previewHTML = `<img src="${thumbnail}" class="preview-media" alt="Video Thumbnail">`;
+                    } else {
+                        previewHTML = `<video src="${downloadLink}" class="preview-media" controls></video>`;
+                    }
+
+                    resultBox.innerHTML = `
+                        <div class="result-card">
+                            <h3>Search result</h3>
+                            ${previewHTML}
+                            <button class="btn-final-download" onclick="window.open('${downloadLink}', '_blank')">Download Video</button>
+                            <p class="result-caption">${captionText.substring(0, 100)}...</p>
+                        </div>
+                    `;
+                    
+                    // Show the card
+                    resultBox.style.display = 'block';
+                    
                 } else {
-                    msg.innerHTML = '❌ Link process karne mein dikkat aayi. Ek baar link check karein.';
+                    msg.innerHTML = '❌ Link process karne mein error aayi. Please check link.';
                     msg.style.color = '#ff0844';
                 }
             } catch (error) {
-                msg.innerHTML = '❌ API Error: ' + error.message;
+                msg.innerHTML = '❌ Server Error: ' + error.message;
                 msg.style.color = '#ff0844';
             }
         }
