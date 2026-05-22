@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NextGen Insta Downloader</title>
+    
+    <title>Instagram Video Downloader - Download Reels, Photos & Stories Free</title>
+    <meta name="description" content="Fastest and free Instagram Video Downloader. Download IG Reels, Photos, Stories, and IGTV videos directly to your gallery in Ultra HD quality anonymously.">
+    <meta name="keywords" content="instagram video downloader, insta reel downloader, download instagram story, save insta video, ig downloader, fastdl alternative, instagram photo download">
+    
     <style>
         /* Import Modern Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
@@ -80,13 +84,13 @@
         #resultContainer { display: none; margin-bottom: 40px; }
         
         .result-card {
-            background: #18181b; /* Solid dark background for structure */
+            background: #18181b; 
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 20px; 
             max-width: 450px; 
             margin: 0 auto;
-            text-align: left; /* Text alignment like FastDL */
+            text-align: left; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .result-card h3 { 
@@ -95,7 +99,6 @@
             font-weight: 800; 
             color: #fff; 
             text-align: center;
-            font-family: 'Inter', sans-serif;
         }
         .preview-media { 
             width: 100%; 
@@ -106,7 +109,7 @@
             object-fit: contain;
         }
         .btn-final-download {
-            background: #2563eb; /* Solid Blue color like FastDL */
+            background: #2563eb; 
             color: #fff; 
             border: none;
             padding: 16px; 
@@ -328,7 +331,7 @@
                     btn.disabled = false;
                 }, 3000);
             } catch (error) {
-                // Agar badi file ho ya browser block kare, toh naye tab mein khol dega
+                // Agar badi file ho ya browser block kare, toh backup method (naye tab mein khol dega)
                 window.open(url, '_blank');
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -377,15 +380,13 @@
                 if (!downloadLink && result.url) downloadLink = result.url;
                 if (!downloadLink && result.video_url) downloadLink = result.video_url;
                 
-                // Caption handle
                 if (result.title) captionText = result.title;
                 else if (result.caption) captionText = result.caption;
 
                 if (downloadLink) {
                     msg.style.display = 'none';
                     
-                    // Naya FastDL jaisa Result Card Setup
-                    // Tute hue image ka jhanjhat khatam, direct video player laga diya hai
+                    // Direct video player + Blue Download Button + Caption
                     resultBox.innerHTML = `
                         <div class="result-card">
                             <h3>Search result</h3>
